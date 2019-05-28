@@ -8,19 +8,23 @@ namespace rnd{
     static std::mt19937 gen(rd());
     return gen;
   }
-  template <typename T>
-  inline T unifrnd(T a,T b){
+  template <typename T,typename RandomGenerator>
+  inline T unifrnd(T a,T b,RandomGenerator& g){
     if constexpr(std::is_integral_v<T>){
       std::uniform_int_distribution<T> dis(a, b);
-      return dis(Generator());
+      return dis(g);
     }
     else {
       std::uniform_real_distribution<T> dis(a, b);
-      return dis(Generator());
+      return dis(g);
     }
   }
+  template <typename T>
+  inline T unifrnd(T a,T b){
+    return unifrnd<T>(a,b,Generator());
+  }
   inline double rand(){
-    return unifrnd(0.,1.);
+    return unifrnd<double>(0.,1.);
   }
   template<typename Iter, typename RandomGenerator>
   inline Iter select_randomly(Iter start, Iter end, RandomGenerator& g){
